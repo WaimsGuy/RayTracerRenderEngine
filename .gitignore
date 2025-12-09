@@ -46,3 +46,6 @@ build/*
 # vscode
 .vscode/*
 
+# commit message file
+msg.txt
+
