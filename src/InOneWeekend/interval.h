@@ -29,6 +29,12 @@ class interval {
         return x;
     }
 
+    //Pads an interval by some delta
+    interval expand(double delta) const {
+        auto padding = delta/2;
+        return interval(min - padding, max + padding);
+    }
+
     static const interval empty, universe;
 };
 
