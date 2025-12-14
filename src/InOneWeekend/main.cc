@@ -131,15 +131,19 @@ void quads() {
     hittable_list world;
 
     // Materials
-    auto left_red     = make_shared<lambertian>(color(1.0, 0.2, 0.2));
+    // auto left_red     = make_shared<lambertian>(color(1.0, 0.2, 0.2));
+    auto left_texture = make_shared<image_texture>("squidward.jpg");
+    auto left_red     = make_shared<lambertian>(left_texture);
     // auto back_green   = make_shared<lambertian>(color(0.2, 1.0, 0.2));
-    auto back_texture = make_shared<image_texture>("squidward.jpg");
+    auto back_texture = make_shared<image_texture>("dinner.jpg");
     auto back_green   = make_shared<lambertian>(back_texture);
     // auto right_blue   = make_shared<lambertian>(color(0.2, 0.2, 1.0));
     auto right_texture= make_shared<image_texture>("cat.jpg");
     auto right_blue   = make_shared<lambertian>(right_texture);
     auto upper_orange = make_shared<lambertian>(color(1.0, 0.5, 0.0));
     auto lower_teal   = make_shared<lambertian>(color(0.2, 0.8, 0.8));
+    // auto lower_texture= make_shared<image_texture>("dinner.jpg");
+    // auto lower_teal   = make_shared<lambertian>(lower_texture);
 
     // Quads
     world.add(make_shared<quad>(point3(-3,-2, 5), vec3(0, 0,-4), vec3(0, 4, 0), left_red));
@@ -149,7 +153,7 @@ void quads() {
     world.add(make_shared<quad>(point3(-2,-3, 5), vec3(4, 0, 0), vec3(0, 0,-4), lower_teal));
 
     // Triangle?
-    world.add(make_shared<triangle>(point3(2, 3, 1), vec3(4, 0, 0), vec3(0, 4, 0), right_blue));
+    // world.add(make_shared<triangle>(point3(2, 3, 1), vec3(4, 0, 0), vec3(0, 4, 0), right_blue));
 
     camera cam;
 
