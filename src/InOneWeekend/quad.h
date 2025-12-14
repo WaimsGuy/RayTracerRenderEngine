@@ -39,13 +39,37 @@ class quad : public hittable {
             return false;
         }
 
+        // Determine if the hit point lies within the planar shape using its plane coords
         auto intersection = r.at(t);
+        vec3 planar_hitpt_vector = intersection - Q;
+        auto alpha = dot(w, cross(planar_hitpt_vector, v));
+        auto beta = dot(w, cross(u, planar_hitpt_vector));
 
+        if (!is_interior(alpha, beta, rec)) {
+            return false;
+        }
+
+        // Ray hit the 2D shape; set the rest of the hit record and return true
         rec.t = t;
         rec.p = intersection;
         rec.mat = mat;
         rec.set_face_normal(r, normal);
 
+        return true;
+    }
+
+    virtual bool is_interior(double a, double b, hit_record& rec) const
+    {
+        interval unit_interval = interval(0,1);
+        //Given the hit point in plane coords, return false if it is outside the primitive
+        //otherwise set the hit record UV coords and return true
+
+        if (!unit_interval.contains(a) || !unit_interval.contains(b)) {
+            return false;
+        }
+
+        rec.u = a;
+        rec.v = b;
         return true;
     }
 
@@ -57,6 +81,28 @@ class quad : public hittable {
     aabb bbox;
     vec3 normal;
     double D;
+};
+
+// Triangles using quad class
+class triangle : public quad {
+    public:
+        triangle(const point3&  origin, const vec3& aa, const vec3& ab, shared_ptr<material> mat)
+            : quad(origin, aa, ab, mat) {}
+        
+        virtual bool is_interior(double a, double b, hit_record& rec) const
+        {
+            //interval unit_interval = interval(0,1);
+            //Given the hit point in plane coords, return false if it is outside the primitive
+            //otherwise set the hit record UV coords and return true
+
+            if ((a < 0) || (b < 0) || (a + b > 1)) {
+                return false;
+            }
+
+            rec.u = a;
+            rec.v = b;
+            return true;
+        }
 };
 
 #endif
